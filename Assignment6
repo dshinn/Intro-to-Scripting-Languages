@@ -1,0 +1,127 @@
+#!/usr/bin/env python
+"""ITS 3210 Introduction to Scripting Languages
+Governor's State University
+David Shinn
+
+Assignment 6
+
+Create a script that performs the following tasks:
+
+1. Ask the user for a numeric score using raw_input()
+2. Convert the user-supplied score into an integer
+3. Return the letter grade for the score in a user-friendly sentence (use the grading
+   scale in the syllabus)
+4. Modify the code you wrote in steps 1-3 so that the script continues asking for a 
+   score until the user types 'end' instead of a score
+5. Every time the user enters a score, save the score in a list
+6. Convert step 1 into its own function that it returns the user input
+7. Convert step 3 into its own function so that it returns the letter grade
+8. Modify the program so that the user can enter as many scores as they'd like (until
+   they type 'end'), and instead of showing the letter grade immediately, wait until
+   the user has typed all of the scores then return formatted output showing each score
+   and its letter grade at the end. Sort the list from low to high scores before 
+   displaying them. The final output should look similar to this (with the scores you
+   enter). Be sure to test entering the minimum and maximum scores for different grades
+   such as 90, 79, and 60:
+
+Score  Grade
+-----  -----
+    0      F
+   72      C
+   84      B
+   91      A
+  100      A
+  
+9. Print the lowest score and corresponding letter grade in a user-friendly sentence.
+10. Create a dictionary with student names and scores, similar to this (use any names
+    and scores you want):
+    
+student_dictionary = {
+    "John Doe": 65,
+    "Jane Doe": 77,
+    "Bob Smith": 100,
+    "Amy Jones": 99
+}
+
+11. Using the function created in step 7, loop through the dictionary and print a 
+    user-friendly sentence with each student's name, score, and corresponding letter grade
+"""
+def getInput():#gets input
+	number = raw_input("Type a grade(type end to end): ")#input
+
+	if number == 'end':#checks for termination input
+		return number
+	else:
+		try:
+			return int(number)#checks for integer and converts to int
+		except ValueError:
+			print 'You know that\'s not a number...\n'
+			return getInput()#gets new input if the input isn't an integer
+		
+def getGrade(number):#prints letter grade for grade number
+	if number >= 91:
+		print 'You got an A\n'
+	elif number >= 84:
+		print 'You got a B\n'
+	elif number >= 72:
+		print 'You got a C\n'
+	else:
+		print 'You got an F\n'
+		
+def getGradeSimple(number):#returns letter for the grade number
+    if number >= 91:
+		return 'A'
+    elif number >= 84:
+		return 'B'
+    elif number >= 72:
+		return 'C'
+    else:
+		return 'F'
+	
+		
+################################################
+gradeList = [] #create list
+number = getInput()#get number
+
+while number != 'end':#check for 'end' to terminate loop
+	getGrade(number)#get and print the letter grade for the number
+	gradeList.append(number)#add number to list
+	number = getInput()#get new number
+
+print "\nNow enter any other grades\n----------------------\n"	
+
+number = getInput()
+
+while number != 'end':#collect numbers and add them to list
+	gradeList.append(number)
+	number = getInput()
+	
+print "\nScore  Grade"
+print "-----  -----"
+
+gradeList.sort()#sort list
+
+for item in gradeList:#iterate through items in the list, printing out a text line for each item
+	print '{0:>5d}  {1:>5s}'.format(item, getGradeSimple(item))
+
+try:#print lowest score
+	print '\nThe lowest grade was a %d, a %s' % (gradeList[0], getGradeSimple(gradeList[0]))
+except IndexError:
+	print 'No scores to show'
+	
+print "\n------------------\n"
+
+student_dictionary = {#create dictionary
+    "John Doe": 65,
+    "Jane Doe": 77,
+    "Bob Smith": 100,
+    "Amy Jones": 99
+}
+
+for k, v in student_dictionary.iteritems():#print all items in dictionary
+	print '{0} received a {1}, which is a {2}'.format(k, v, getGradeSimple(v))
+
+print '\n\n'
+
+
+###############################################
